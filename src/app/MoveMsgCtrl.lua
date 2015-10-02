@@ -8,13 +8,18 @@ function MoveMsgCtrl:onMoveMsg( event )
 	print(event)
 	if game.FSMStateCtrl:getCurStateName() ~= 'StateCubeMove' then return end
 	if event == 'left' then
-		game.blackground:left(game.curCube.cube,game.curCube.row,game.curCube.col)
+		if game.blackground:left(game.curCube.cube,game.curCube.row,game.curCube.col) then
+			game.curCube.col = curCube.col - 1
+		end
 	elseif event == 'right' then
-		game.blackground:right(game.curCube.cube,game.curCube.row,game.curCube.col)
+		if game.blackground:right(game.curCube.cube,game.curCube.row,game.curCube.col) then
+			game.curCube.col = curCube.col + 1
+		end
 	elseif event == 'down' then
-		game.blackground:down(game.curCube.cube,game.curCube.row,game.curCube.col)
+		if game.blackground:down(game.curCube.cube,game.curCube.row,game.curCube.col) then
+			game.curCube.row = game.curCube.row + 1
+		end
 	end
-	game.curCube.cube:draw()
     game.blackground:draw()
 end
 

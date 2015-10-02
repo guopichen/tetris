@@ -40,31 +40,48 @@ function PlayScene:onCreate()
     self:addChild( downButton)
     downButton:setPosition(display.cx, display.cy-200)
     
+    --
+    local cubes = cc.Node:create()
+    cubes:setName('cubes')
+    display.getRunningScene():addChild(cubes)
+
+    -- 背景框
+    local drawNode = cc.DrawNode:create()
+    local startPos = cc.p(100,100)
+    local endPos = cc.p(startPos.x+300,startPos.y+500)
+    drawNode:drawRect(startPos,endPos,cc.c4f(1,0,0,1))
+    self:addChild(drawNode)
 end
 
--- function PlayScene:onCreate()
---     -- create game view and add it to stage
---     self.gameView_ = GameView:create()
---         :addEventListener(GameView.events.PLAYER_DEAD_EVENT, handler(self, self.onPlayerDead))
---         :start()
---         :addTo(self)
--- end
+function PlayScene:initCubes()
+    for i=1,game.blackground.row do
+        for j=1,game.blackground.col do
+            --
+            local sp = cc.Spirte:create("cube.png")
+            sp:setName(i..j)
+            local cubeSize = sp:getContentSize().width + 2
+            local posX = self.startPosX + (i-1)*cubeSize
+            local posY = self.startPosY + (j-1)*cubeSize
+            sp:setPosition(cc.p(posX,posY))
+            sp:setVisible(false)
+            node:addChild(sp)
+        end
+    end
+end
 
--- function PlayScene:onPlayerDead(event)
---     -- add game over text
---     local text = string.format("You killed %d bugs", self.gameView_:getKills())
---     cc.Label:createWithSystemFont(text, "Arial", 96)
---         :align(display.CENTER, display.center)
---         :addTo(self)
+function PlayScene:draw()
+    local matrix = game.blackground.m
+    -- clear cubes
+    local node = display.getRunningScene():getChilidByName('cubes')
+    node:removeAllChildrenWithCleanup(true)
+    for i=1,self.row do
+        for j=1,self.col do
+            local sp = node:getChildByName(i..j)
+            sp:setVisible(matrix[i][j] == 1 and true or false)
+        end
+    end
+end
 
---     -- add exit button
---     local exitButton = cc.MenuItemImage:create("ExitButton.png", "ExitButton.png")
---         :onClicked(function()
---             self:getApp():enterScene("MainScene")
---         end)
---     cc.Menu:create(exitButton)
---         :move(display.cx, display.cy - 200)
---         :addTo(self)
--- end
+
 
 return PlayScene

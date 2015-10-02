@@ -3,6 +3,8 @@
 
 local Blackground = class( "Blackground" )
 
+local N = 4
+
 -- 初始化背景为: 0
 function Blackground:ctor( row, col )
 	print("---this is Blackground:ctor----")
@@ -18,6 +20,17 @@ function Blackground:ctor( row, col )
 end
 
 
+function Blackground:copyValue( cube, curCol, curRow )
+	local maxCol = curCol+N>self.col and self.col or curCol+N
+	local maxRow = curRow+N>self.row and self.row or curCol+N
+	for i=minRow,maxRow do
+		for j=minCol,maxCol do
+			self.m[i][j] = cube[i][j]
+		end
+	end
+end
+
+
 function Blackground:left(cube, curRow, curCol)
 	local backCol = curCol - 1
 	if backCol<1 then return false end
@@ -27,7 +40,7 @@ function Blackground:left(cube, curRow, curCol)
 			return false 
 		end
 	end
-	-- ... 背景赋值
+	self:copyValue(cube,curCol,curRow)
 	return true
 end
 
@@ -40,7 +53,7 @@ function Blackground:right(cube, curRow, curCol)
 			return false 
 		end
 	end
-	-- ... 背景赋值
+	self:copyValue(cube,curCol,curRow)
 	return true
 end
 
@@ -58,12 +71,16 @@ function Blackground:down( cube, curRow, curCol )
 				local stateName = self:isOver() and 'StateGameOver' or 'StateCubeStandby'
 				game.FSMStateCtrl:gotoState(stateName)
 			end
-
 			return false
 		end
 	end
-	-- moveToDow ...
+	self:copyValue(cube,curCol,curRow)
 	return true
+end
+
+function Blackground:initBackRect( startPosX, startPosY )
+	self.startPosX = startPosX
+	self.startPosY = startPosY
 end
 
 function Blackground:isOver()
@@ -76,6 +93,10 @@ end
 
 -- 根据数据, 重绘
 function Blackground:draw()
+
+
+
+	
 end
 
 --[[ 

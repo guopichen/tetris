@@ -12,7 +12,6 @@ function StateCubeMove:onEnter()
     end
     self.schedulerUpdate = scheduler:scheduleScriptFunc(function( delta )
         game.cubeMove:down(game.curCube.cube,game.curCube.row,game.curCube.col)
-        game.curCube.cube:draw()
         game.blackground:draw()
     end,  2, false)
 end

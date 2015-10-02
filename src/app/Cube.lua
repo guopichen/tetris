@@ -47,14 +47,11 @@ function Cube:ctor( cubeType )
 	self.m = t[cubeType]
 end
 
--- 根据数据, 重绘
-function Cube:draw()
-end
 
 -- dir>0: 顺时针90°,   dir<0:逆时针90°
 function Cube:rotate( t, dir )
 	-- if not dir then return end
-
+	local N = 4
 	-- copy to m
 	local m = { {},{},{},{}, }
 	for i=1,N do
@@ -63,7 +60,7 @@ function Cube:rotate( t, dir )
 		end
 	end
 	-- rotate self.m
-	local N = 4
+	
 	for i=1,N do
 		for j=1,N do
 			self.m[i][j] = m[j][N+1-i]
