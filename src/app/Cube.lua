@@ -20,9 +20,9 @@ local t =
 			},
 	[3] = 
 			{
+				{1,0,0,0},
 				{1,1,0,0},
-				{1,1,0,0},
-				{0,0,0,0},
+				{0,1,0,0},
 				{0,0,0,0},
 			},
 	[4] = 
@@ -49,7 +49,7 @@ end
 
 
 -- dir>0: 顺时针90°,   dir<0:逆时针90°
-function Cube:rotate( t, dir )
+function Cube:rotate( dir )
 	-- if not dir then return end
 	local N = 4
 	-- copy to m

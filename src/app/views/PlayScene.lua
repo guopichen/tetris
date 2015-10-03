@@ -16,7 +16,7 @@ function PlayScene:onCreate()
     leftButton:setTouchEnabled(true)
     leftButton:addTouchEventListener(leftTouchEvent)
     self:addChild( leftButton)
-    leftButton:setPosition(display.cx-200, display.cy)
+    leftButton:setPosition(display.cx+100, display.cy)
 
     local function rightTouchEvent(sender,eventType)
         if eventType == ccui.TouchEventType.ended then
@@ -27,7 +27,7 @@ function PlayScene:onCreate()
     rightButton:setTouchEnabled(true)
     rightButton:addTouchEventListener(rightTouchEvent)
     self:addChild( rightButton)
-    rightButton:setPosition(display.cx+200, display.cy)
+    rightButton:setPosition(display.cx+300, display.cy)
 
     local function downTouchEvent(sender,eventType)
         if eventType == ccui.TouchEventType.ended then
@@ -38,50 +38,73 @@ function PlayScene:onCreate()
     downButton:setTouchEnabled(true)
     downButton:addTouchEventListener(downTouchEvent)
     self:addChild( downButton)
-    downButton:setPosition(display.cx, display.cy-200)
+    downButton:setPosition(display.cx+200, display.cy-200)
+
+
+    local function ratoteTouchEvent(sender,eventType)
+        if eventType == ccui.TouchEventType.ended then
+            game.MoveMsgCtrl:onMoveMsg('rotate')
+        end
+    end
+    local rotateButton = ccui.Button:create('PlayButton.png')
+    rotateButton:setTouchEnabled(true)
+    rotateButton:addTouchEventListener(ratoteTouchEvent)
+    self:addChild( rotateButton)
+    rotateButton:setPosition(display.cx+200, display.cy+200)
     
     --
-    local cubes = cc.Node:create()
-    cubes:setName('cubes')
-    display.getRunningScene():addChild(cubes)
+    self.cubeNodes = cc.Node:create()
+    self.cubeNodes:setName('cubes')
+    self:addChild(self.cubeNodes,2)
 
     -- 背景框
+    self.w = 300
+    self.h = 500
     local drawNode = cc.DrawNode:create()
-    local startPos = cc.p(100,100)
-    local endPos = cc.p(startPos.x+300,startPos.y+500)
-    drawNode:drawRect(startPos,endPos,cc.c4f(1,0,0,1))
+    self.startPos = cc.p(100,100)
+    local endPos = cc.p(self.startPos.x+self.w,self.startPos.y+self.h)
+    drawNode:drawRect(self.startPos,endPos,cc.c4f(0,1,0,1))
     self:addChild(drawNode)
+    --
+    self:initCubes()
+
+    --
+    self.repaintListener  = cc.EventListenerCustom:create( 'repaint', function( event)
+        self:draw()
+    end)
+    cc.Director:getInstance():getEventDispatcher():addEventListenerWithFixedPriority(self.repaintListener,1)
 end
 
+
+
 function PlayScene:initCubes()
+    local cubeSize = 23
+    local space = 2
     for i=1,game.blackground.row do
         for j=1,game.blackground.col do
-            --
-            local sp = cc.Spirte:create("cube.png")
-            sp:setName(i..j)
-            local cubeSize = sp:getContentSize().width + 2
-            local posX = self.startPosX + (i-1)*cubeSize
-            local posY = self.startPosY + (j-1)*cubeSize
-            sp:setPosition(cc.p(posX,posY))
-            sp:setVisible(false)
-            node:addChild(sp)
+            local drawNode = cc.DrawNode:create()
+            -- local startPos = cc.p(self.startPos.y+(j-1)*(cubeSize+space),self.startPos.x+(i-1)*(cubeSize+space))
+            drawNode:drawSolidRect(startPos,cc.p(startPos.x+cubeSize,startPos.y+cubeSize),cc.c4f(1,0,0,1))
+            -- drawNode:setVisible(false)
+            drawNode:setName(i..j)
+            self.cubeNodes:addChild(drawNode)
         end
     end
 end
 
 function PlayScene:draw()
-    local matrix = game.blackground.m
-    -- clear cubes
-    local node = display.getRunningScene():getChilidByName('cubes')
-    node:removeAllChildrenWithCleanup(true)
-    for i=1,self.row do
-        for j=1,self.col do
-            local sp = node:getChildByName(i..j)
-            sp:setVisible(matrix[i][j] == 1 and true or false)
-        end
-    end
+    local sp = self.cubeNodes:getChildByName('11')
+    sp:setVisible(true)
+
+    -- local matrix = game.blackground.m
+    -- for i=1,game.blackground.row do
+    --     for j=1,game.blackground.col do
+    --         local sp = self.cubeNodes:getChildByName(i..j)
+    --         sp:setVisible(matrix[i][j] == 1 and true or false)
+    --     end
+    -- end
 end
 
-
+-- cc.Director:getInstance():getEventDispatcher():removeEventListener(self.repaintListener)
 
 return PlayScene

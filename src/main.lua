@@ -15,15 +15,15 @@ local function gameInit()
 	game.row = 20
 	game.col = 10
 	
-	game.FSMStateCtrl = require('app.FSMStateCtrl').new()
-	game.FSMStateCtrl:registState( 'StateCubeMove', require('app.StateCubeMove').new() )
-	game.FSMStateCtrl:registState( 'StateCubeStandby', require('app.StateCubeStandby').new() )
-	game.FSMStateCtrl:registState( 'StateGameMenu', require('app.StateGameMenu').new() )
-	game.FSMStateCtrl:registState( 'StateGameOver', require('app.StateGameOver').new() )
+	game.FSMStateCtrl = require('app.FSMStateCtrl'):create()
+	game.FSMStateCtrl:registState( 'StateCubeMove', require('app.StateCubeMove'):create() )
+	game.FSMStateCtrl:registState( 'StateCubeStandby', require('app.StateCubeStandby'):create() )
+	game.FSMStateCtrl:registState( 'StateGameMenu', require('app.StateGameMenu'):create() )
+	game.FSMStateCtrl:registState( 'StateGameOver', require('app.StateGameOver'):create() )
 	--
-	game.MoveMsgCtrl = require('app.MoveMsgCtrl').new()
+	game.MoveMsgCtrl = require('app.MoveMsgCtrl'):create()
 	--
-	game.blackground = require('app.Blackground').new(20,10)
+	game.blackground = require('app.Blackground'):create(20,12)
 end
 
 local function main()

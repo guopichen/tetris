@@ -21,13 +21,25 @@ end
 
 
 function Blackground:copyValue( cube, curCol, curRow )
+	print("----this is Blackground:copyValue----")
+	-- for k,v in pairs(cube.m) do
+	-- 	print(k)
+	-- 	print(v)
+	-- end
+
+	local minCol = curCol<1 and 1 or curCol
+	local minRow = curRow<1 and 1 or curRow
 	local maxCol = curCol+N>self.col and self.col or curCol+N
 	local maxRow = curRow+N>self.row and self.row or curCol+N
+	-- print("")
 	for i=minRow,maxRow do
 		for j=minCol,maxCol do
-			self.m[i][j] = cube[i][j]
+			-- print("i: "..i.."  j: "..j)
+			-- print(cube.m[i][j])
+			self.m[i][j] = cube.m[i][j]
 		end
 	end
+	print()
 end
 
 
@@ -36,7 +48,7 @@ function Blackground:left(cube, curRow, curCol)
 	if backCol<1 then return false end
 	local maxRow = curRow+N>row and curRow or curRow+N
 	for i=curRow,maxRow do
-		if self.m[i][backCol] == 1 and cube[i-curRow][1]==1 then
+		if self.m[i][backCol] == 1 and cube.m[i-curRow][1]==1 then
 			return false 
 		end
 	end
@@ -49,7 +61,7 @@ function Blackground:right(cube, curRow, curCol)
 	if backCol<1 then return false end
 	local maxRow = curRow+N>row and curRow or curRow+N
 	for i=curRow,maxRow do
-		if self.m[i][backCol] == 1 and cube[i-curRow][N]==1 then
+		if self.m[i][backCol] == 1 and cube.m[i-curRow][N]==1 then
 			return false 
 		end
 	end
@@ -58,11 +70,13 @@ function Blackground:right(cube, curRow, curCol)
 end
 
 function Blackground:down( cube, curRow, curCol )
+	print("---Blackground:down---")
+	-- print(cube)
 	local backRow = curRow + 1
-	if not backRow<totalRow then return false end -- 到底了
-	local maxCol = curCol+N>col and col or curCol+N
+	if not (backRow<self.row) then return false end -- 到底了
+	local maxCol = curCol+N>self.col and self.col or curCol+N
 	for j=curCol,maxCol do -- 只需判断和cube重叠的部分
-		if self.m[backRow][j] == 1 and cube[N][j-curCol]==1 then -- 背景块和对应的cube块都为
+		if self.m[backRow][j] == 1 and cube.m[N][j-curCol]==1 then -- 背景块和对应的cube块都为
 			-- 
 			self:checkDisapear()
 			if #self.disapearLines > 1 then -- 有消除的行
@@ -91,13 +105,6 @@ function Blackground:runDisapearEffect()
 	-- body
 end
 
--- 根据数据, 重绘
-function Blackground:draw()
-
-
-
-	
-end
 
 --[[ 
 	检测消除

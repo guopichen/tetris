@@ -19,6 +19,8 @@ function MoveMsgCtrl:onMoveMsg( event )
 		if game.blackground:down(game.curCube.cube,game.curCube.row,game.curCube.col) then
 			game.curCube.row = game.curCube.row + 1
 		end
+	elseif event == 'rotate' then
+		game.curCube.row = game.curCube.row + 1
 	end
     game.blackground:draw()
 end

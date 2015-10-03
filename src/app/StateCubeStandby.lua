@@ -2,13 +2,15 @@
 local StateCubeStandby = class( "StateCubeStandby" )
 
 function StateCubeStandby:ctor()
+	print("this is StateCubeStandby:ctor")
 end
 
 function StateCubeStandby:onEnter()
+	print("this is StateCubeStandby:onEnter")
 	-- 随机一个方块
 	math.randomseed(os.time())
 	game.curCube = {}
-	game.curCube.cube = require('app.Cube'):new(math.random(1,5))
+	game.curCube.cube = require('app.Cube'):create(3)--
 	game.curCube.row = 0
 	game.curCube.col = 0
 	-- 开始计时: 两秒后进入cubemove的状态
