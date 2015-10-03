@@ -8,6 +8,7 @@ local N = 4
 -- 初始化背景为: 0
 function Blackground:ctor( row, col )
 	print("---this is Blackground:ctor----")
+	print("row is: "..row.." col is: "..col)
 	self.row = row
 	self.col = col
 	self.m = {}
@@ -21,25 +22,29 @@ end
 
 
 function Blackground:copyValue( cube, curCol, curRow )
-	print("----this is Blackground:copyValue----")
-	-- for k,v in pairs(cube.m) do
-	-- 	print(k)
-	-- 	print(v)
-	-- end
+	print("----this is Blackground:copyValue----"..curCol)
 
-	local minCol = curCol<1 and 1 or curCol
-	local minRow = curRow<1 and 1 or curRow
-	local maxCol = curCol+N>self.col and self.col or curCol+N
-	local maxRow = curRow+N>self.row and self.row or curCol+N
-	-- print("")
-	for i=minRow,maxRow do
-		for j=minCol,maxCol do
-			-- print("i: "..i.."  j: "..j)
-			-- print(cube.m[i][j])
-			self.m[i][j] = cube.m[i][j]
+	-- clear
+	for r=1,self.row do
+		for c=1,self.col do
+			self.m[r][c] = 0
 		end
 	end
-	print()
+
+	-- print("")
+	for r=1,N do
+		for c=1,N do
+			local col = curCol+c-1
+			local row = curRow+r
+			if not(col>self.col) and not(row>self.row) then
+				self.m[row][col] = cube.m[r][c]
+			end
+		end
+	end
+	-- dump(self.m)
+
+
+	-- print()
 end
 
 
@@ -70,24 +75,33 @@ function Blackground:right(cube, curRow, curCol)
 end
 
 function Blackground:down( cube, curRow, curCol )
-	print("---Blackground:down---")
-	-- print(cube)
-	local backRow = curRow + 1
-	if not (backRow<self.row) then return false end -- 到底了
-	local maxCol = curCol+N>self.col and self.col or curCol+N
-	for j=curCol,maxCol do -- 只需判断和cube重叠的部分
-		if self.m[backRow][j] == 1 and cube.m[N][j-curCol]==1 then -- 背景块和对应的cube块都为
-			-- 
-			self:checkDisapear()
-			if #self.disapearLines > 1 then -- 有消除的行
-				self:runDisapearEffect()
-			else
-				local stateName = self:isOver() and 'StateGameOver' or 'StateCubeStandby'
-				game.FSMStateCtrl:gotoState(stateName)
-			end
-			return false
-		end
+	local lastRow = curRow+cube.bottomRow-1
+	print('lastRow: '..lastRow)
+	if not(lastRow<self.row) then
+		return false
 	end
+	-- local nextRow = curRow + 1
+	-- if nextRow>self.row then 
+	-- 	return false 
+	-- end -- 到底了
+	-- local maxCol = curCol+N>self.col and self.col or curCol+N
+
+	--
+	print('curRow: '..curRow.."  curCol: "..curCol)
+
+	-- for j=curCol,maxCol do -- 只需判断和cube重叠的部分
+	-- 	if self.m[backRow][j] == 1 and cube.m[N][j-curCol]==1 then -- 背景块和对应的cube块都为
+	-- 		-- 
+	-- 		self:checkDisapear()
+	-- 		if #self.disapearLines > 1 then -- 有消除的行
+	-- 			self:runDisapearEffect()
+	-- 		else
+	-- 			local stateName = self:isOver() and 'StateGameOver' or 'StateCubeStandby'
+	-- 			game.FSMStateCtrl:gotoState(stateName)
+	-- 		end
+	-- 		return false
+	-- 	end
+	-- end
 	self:copyValue(cube,curCol,curRow)
 	return true
 end
@@ -98,7 +112,7 @@ function Blackground:initBackRect( startPosX, startPosY )
 end
 
 function Blackground:isOver()
-	
+	return false
 end
 
 function Blackground:runDisapearEffect()

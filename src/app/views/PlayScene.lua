@@ -80,29 +80,29 @@ end
 function PlayScene:initCubes()
     local cubeSize = 23
     local space = 2
+    local N = game.blackground.row
     for i=1,game.blackground.row do
         for j=1,game.blackground.col do
             local drawNode = cc.DrawNode:create()
-            -- local startPos = cc.p(self.startPos.y+(j-1)*(cubeSize+space),self.startPos.x+(i-1)*(cubeSize+space))
+            local startPos = cc.p(self.startPos.x+(j-1)*(cubeSize+space),self.startPos.y+(N-i)*(cubeSize+space))
+            -- startPos.y = self.startPos.y
             drawNode:drawSolidRect(startPos,cc.p(startPos.x+cubeSize,startPos.y+cubeSize),cc.c4f(1,0,0,1))
-            -- drawNode:setVisible(false)
-            drawNode:setName(i..j)
+            drawNode:setVisible(false)
+            drawNode:setName(i..'*'..j)
             self.cubeNodes:addChild(drawNode)
         end
     end
 end
 
 function PlayScene:draw()
-    local sp = self.cubeNodes:getChildByName('11')
-    sp:setVisible(true)
-
-    -- local matrix = game.blackground.m
-    -- for i=1,game.blackground.row do
-    --     for j=1,game.blackground.col do
-    --         local sp = self.cubeNodes:getChildByName(i..j)
-    --         sp:setVisible(matrix[i][j] == 1 and true or false)
-    --     end
-    -- end
+    print("-----draw------")
+    local matrix = game.blackground.m
+    for i=1,game.blackground.row do
+        for j=1,game.blackground.col do
+            local sp = self.cubeNodes:getChildByName(i..'*'..j)
+            sp:setVisible(matrix[i][j] == 1 and true or false)
+        end
+    end
 end
 
 -- cc.Director:getInstance():getEventDispatcher():removeEventListener(self.repaintListener)

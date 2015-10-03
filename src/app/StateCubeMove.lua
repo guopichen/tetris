@@ -12,9 +12,11 @@ function StateCubeMove:onEnter()
         scheduler:unscheduleScriptEntry(self.schedulerUpdate)
     end
     self.schedulerUpdate = scheduler:scheduleScriptFunc(function( delta )
-        game.blackground:down(game.curCube.cube,game.curCube.row,game.curCube.col)
+        if game.blackground:down(game.curCube.cube,game.curCube.row,game.curCube.col) then 
+            game.curCube.row = game.curCube.row + 1
+        end
         cc.Director:getInstance():getEventDispatcher():dispatchEvent(cc.EventCustom:new('repaint'))
-    end,  2, false)
+    end,  0.1, false)
 end
 
 function StateCubeMove:onExit()
