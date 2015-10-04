@@ -47,61 +47,30 @@ function Blackground:copyValue( cube, curCol, curRow )
 	-- print()
 end
 
+function Blackground:down( cube, curRow, curCol )
+	local lastRow = curRow+cube.bottomRow-1
+	-- print('lastRow: '..lastRow)
+	if not(lastRow<self.row) then
+		return false -- 到底了
+	end
+	self:copyValue(cube,curCol,curRow)
+	return true
+end
 
 function Blackground:left(cube, curRow, curCol)
-	local backCol = curCol - 1
-	if backCol<1 then return false end
-	local maxRow = curRow+N>row and curRow or curRow+N
-	for i=curRow,maxRow do
-		if self.m[i][backCol] == 1 and cube.m[i-curRow][1]==1 then
-			return false 
-		end
+	local leftCol = curCol+cube.leftCol-1
+	if not(leftCol>1) then
+		return false -- 到边了
 	end
 	self:copyValue(cube,curCol,curRow)
 	return true
 end
 
 function Blackground:right(cube, curRow, curCol)
-	local backCol = curCol - 1
-	if backCol<1 then return false end
-	local maxRow = curRow+N>row and curRow or curRow+N
-	for i=curRow,maxRow do
-		if self.m[i][backCol] == 1 and cube.m[i-curRow][N]==1 then
-			return false 
-		end
+	local rightCol = curCol+cube.rightCol-1
+	if not(rightCol<self.col) then
+		return false -- 到边了
 	end
-	self:copyValue(cube,curCol,curRow)
-	return true
-end
-
-function Blackground:down( cube, curRow, curCol )
-	local lastRow = curRow+cube.bottomRow-1
-	print('lastRow: '..lastRow)
-	if not(lastRow<self.row) then
-		return false
-	end
-	-- local nextRow = curRow + 1
-	-- if nextRow>self.row then 
-	-- 	return false 
-	-- end -- 到底了
-	-- local maxCol = curCol+N>self.col and self.col or curCol+N
-
-	--
-	print('curRow: '..curRow.."  curCol: "..curCol)
-
-	-- for j=curCol,maxCol do -- 只需判断和cube重叠的部分
-	-- 	if self.m[backRow][j] == 1 and cube.m[N][j-curCol]==1 then -- 背景块和对应的cube块都为
-	-- 		-- 
-	-- 		self:checkDisapear()
-	-- 		if #self.disapearLines > 1 then -- 有消除的行
-	-- 			self:runDisapearEffect()
-	-- 		else
-	-- 			local stateName = self:isOver() and 'StateGameOver' or 'StateCubeStandby'
-	-- 			game.FSMStateCtrl:gotoState(stateName)
-	-- 		end
-	-- 		return false
-	-- 	end
-	-- end
 	self:copyValue(cube,curCol,curRow)
 	return true
 end

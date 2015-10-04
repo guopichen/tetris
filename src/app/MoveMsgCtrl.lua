@@ -9,11 +9,11 @@ function MoveMsgCtrl:onMoveMsg( event )
 	if game.FSMStateCtrl:getCurStateName() ~= 'StateCubeMove' then return end
 	if event == 'left' then
 		if game.blackground:left(game.curCube.cube,game.curCube.row,game.curCube.col) then
-			game.curCube.col = curCube.col - 1
+			game.curCube.col = game.curCube.col - 1
 		end
 	elseif event == 'right' then
 		if game.blackground:right(game.curCube.cube,game.curCube.row,game.curCube.col) then
-			game.curCube.col = curCube.col + 1
+			game.curCube.col = game.curCube.col + 1
 		end
 	elseif event == 'down' then
 		if game.blackground:down(game.curCube.cube,game.curCube.row,game.curCube.col) then
@@ -22,7 +22,7 @@ function MoveMsgCtrl:onMoveMsg( event )
 	elseif event == 'rotate' then
 		game.curCube.row = game.curCube.row + 1
 	end
-    game.blackground:draw()
+    cc.Director:getInstance():getEventDispatcher():dispatchEvent(cc.EventCustom:new('repaint'))
 end
 
 

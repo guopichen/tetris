@@ -46,18 +46,50 @@ function Cube:ctor( cubeType )
 	print('---Cube:ctor---')
 	if not cubeType then return end
 	self.m = t[cubeType]
-	self:updateBottomRow()
+	self:updateMatrix()
 end
 
-function Cube:updateBottomRow()
+function Cube:updateMatrix()
+	local N = 4
+	local flag = false
+	--
 	local bottomRow = 1
-	for r=4,1,-1 do
-		for c=1,4 do
+	for r=N,1,-1 do
+		for c=1,N do
 			-- print(r)
 			if self.m[r][c] == 1 then
 				self.bottomRow = r
 				print('bottomRow: '..self.bottomRow)
-				return
+				flag = true
+				break
+			end
+		end
+		if flag  then break end
+	end
+
+	--
+	flag = false
+	local leftCol = 1
+	for c=1,N do
+		for r=1,4 do
+			if self.m[r][c] == 1 then
+				self.leftCol = c
+				print('leftCol: '..self.leftCol)
+				flag = true
+				break
+			end
+		end
+	end
+	--
+	flag = false
+	local rightCol = 1
+	for c=N,1,-1 do
+		for r=1,4 do
+			if self.m[r][c] == 1 then
+				self.rightCol = c
+				print('rightCol: '..self.rightCol)
+				flag = true
+				break
 			end
 		end
 	end
@@ -83,7 +115,7 @@ function Cube:rotate( dir )
 		end
 	end
 
-	self:updateBottomRow()
+	self:updateMatrix()
 end
 
 return Cube
