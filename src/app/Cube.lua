@@ -79,6 +79,7 @@ function Cube:updateMatrix()
 				break
 			end
 		end
+		if flag  then break end
 	end
 	--
 	flag = false
@@ -92,6 +93,7 @@ function Cube:updateMatrix()
 				break
 			end
 		end
+		if flag  then break end
 	end
 end
 
@@ -107,6 +109,61 @@ function Cube:rotate( dir )
 			m[i][j] = self.m[i][j]
 		end
 	end
+
+	-- 从左到右, 找到值为1的列, 然后整体左移
+	-- local flag = false
+	-- local col = 1
+	-- for c=1,N do
+	-- 	for r=1,N do
+	-- 		if m[r][c] == 1 then
+	-- 			col = c
+	-- 			flag = true
+	-- 			break
+	-- 		end
+	-- 	end
+	-- 	if flag then break end
+	-- end
+	-- if col > 1 then -- 左移
+	-- 	for c=1,col do
+	-- 		for r=1,N do
+	-- 			m[r][c] = m[r][c+1]
+	-- 		end
+	-- 	end
+	-- 	--
+	-- 	for c=col+1,N do
+	-- 		for r=1,N do
+	-- 			m[r][c] = 0
+	-- 		end
+	-- 	end
+	-- end
+	
+	-- 从下往上, 找到值为1的列, 然后整体上移
+	-- flag = false
+	-- local row = N
+	-- for r=N,1,-1 do
+	-- 	for c=1,N do
+	-- 		if m[r][c] == 1 then
+	-- 			row = c
+	-- 			flag = true
+	-- 			break
+	-- 		end
+	-- 	end
+	-- 	if flag then break end
+	-- end
+	-- if row > 1 then -- 上移
+	-- 	for r=1,row-1 do
+	-- 		for c=1,N do
+	-- 			m[r][c] = m[r+1][c]
+	-- 		end
+	-- 	end
+	-- 	--
+	-- 	for r=row+1,N do
+	-- 		for c=1,N do
+	-- 			m[r][c] = 0
+	-- 		end
+	-- 	end
+	-- end
+
 	-- rotate self.m
 	
 	for i=1,N do

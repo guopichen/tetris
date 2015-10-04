@@ -22,38 +22,44 @@ end
 
 
 function Blackground:copyValue( cube, curCol, curRow )
-	print("----this is Blackground:copyValue----"..curCol)
+	-- print("----this is Blackground:copyValue----")
 
-	-- clear
-	for r=1,self.row do
-		for c=1,self.col do
-			self.m[r][c] = 0
-		end
-	end
+	-- print("curCol: "..curCol.." curRow: "..curRow)
 
-	-- print("")
+
+	-- --
 	for r=1,N do
 		for c=1,N do
-			local col = curCol+c-1
-			local row = curRow+r
-			if not(col>self.col) and not(row>self.row) then
+			if cube.m[r][c] == 1 then
+				local col = curCol+c-1
+				local row = curRow+r-1
+				-- if not(col>self.col) and not(row>self.row) then
+				-- print("row: "..row.." col: "..col.." r: "..r.." c: "..c)
 				self.m[row][col] = cube.m[r][c]
+				-- end
 			end
 		end
 	end
-	-- dump(self.m)
-
-
-	-- print()
 end
 
 function Blackground:down( cube, curRow, curCol )
 	local lastRow = curRow+cube.bottomRow-1
-	-- print('lastRow: '..lastRow)
+	print('lastRow: '..lastRow)
 	if not(lastRow<self.row) then
+		self:copyValue(cube,curCol,curRow)
 		return false -- 到底了
 	end
-	self:copyValue(cube,curCol,curRow)
+	--
+	-- local nextRow = lastRow + 1
+	for r=cube.bottomRow,1,-1 do
+		for c=1,N do
+			if cube.m[r][c] == 1 and self.m[curRow+r][curCol+c-1] == 1 then
+				self:copyValue(cube,curCol,curRow)
+				return false
+			end
+		end
+	end
+
 	return true
 end
 
@@ -62,7 +68,14 @@ function Blackground:left(cube, curRow, curCol)
 	if not(leftCol>1) then
 		return false -- 到边了
 	end
-	self:copyValue(cube,curCol,curRow)
+	--
+	for c=cube.leftCol,N do
+		for r=1,N do 
+			if cube.m[r][c] == 1 and self.m[curRow+r-1][curCol+c-2] == 1 then
+				return false
+			end
+		end
+	end
 	return true
 end
 
@@ -71,7 +84,14 @@ function Blackground:right(cube, curRow, curCol)
 	if not(rightCol<self.col) then
 		return false -- 到边了
 	end
-	self:copyValue(cube,curCol,curRow)
+	--
+	for c=cube.rightCol,1,-1 do
+		for r=1,N do 
+			if cube.m[r][c] == 1 and self.m[curRow+r-1][curCol+c] == 1 then
+				return false
+			end
+		end
+	end
 	return true
 end
 

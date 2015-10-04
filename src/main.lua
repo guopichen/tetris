@@ -13,7 +13,7 @@ local function gameInit()
 	
 	game = {}
 	game.row = 20
-	game.col = 10
+	game.col = 12
 	
 	game.FSMStateCtrl = require('app.FSMStateCtrl'):create()
 	game.FSMStateCtrl:registState( 'StateCubeMove', require('app.StateCubeMove'):create() )
@@ -23,7 +23,7 @@ local function gameInit()
 	--
 	game.MoveMsgCtrl = require('app.MoveMsgCtrl'):create()
 	--
-	game.blackground = require('app.Blackground'):create(20,12)
+	game.blackground = require('app.Blackground'):create(game.row,game.col)
 end
 
 local function main()

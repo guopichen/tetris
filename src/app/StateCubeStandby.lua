@@ -10,7 +10,7 @@ function StateCubeStandby:onEnter()
 	-- 随机一个方块
 	math.randomseed(os.time())
 	game.curCube = {}
-	game.curCube.cube = require('app.Cube'):create(1)--math.random(1,5)
+	game.curCube.cube = require('app.Cube'):create(math.random(1,5))--
 	game.curCube.row = 0
 	game.curCube.col = 5
 	-- 开始计时: 两秒后进入cubemove的状态

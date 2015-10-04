@@ -94,8 +94,9 @@ function PlayScene:initCubes()
     end
 end
 
+-- 需要先渲染背景, 再渲染方块
 function PlayScene:draw()
-    print("-----draw------")
+    local N=4
     local matrix = game.blackground.m
     for i=1,game.blackground.row do
         for j=1,game.blackground.col do
@@ -103,6 +104,27 @@ function PlayScene:draw()
             sp:setVisible(matrix[i][j] == 1 and true or false)
         end
     end
+    
+    for r=1,N do
+        for c=1,N do
+            local i = game.curCube.row+r-1
+            local j= game.curCube.col+c-1
+            -- print('')
+            -- print(" i: "..i.." j: "..j.." curCol: "..game.curCube.col)
+            -- print('')
+
+            if not(i>game.row) and not(j>game.col) then
+                local sp = self.cubeNodes:getChildByName(i..'*'..j)
+                if game.curCube.cube.m[r][c] == 1 then
+                    sp:setVisible(true)
+                end
+            end
+        end
+    end
+    
+
+    -- print("-----draw------")
+
 end
 
 -- cc.Director:getInstance():getEventDispatcher():removeEventListener(self.repaintListener)
