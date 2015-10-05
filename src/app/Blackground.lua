@@ -55,7 +55,23 @@ function Blackground:canRotate( cube )
 	self.rotateCube:setType(cube:getType())
 	self.rotateCube:setPos(cube:getPos())
 	self.rotateCube:setShape(cube:getShape())
-	return self:canDown(self.rotateCube) and self:canLeft(self.rotateCube) and self:canRight(self.rotateCube)
+	--
+	self.rotateCube:rotate()
+	-- 
+	local matrix = self.rotateCube:getMatrix()
+	local matrixSize = self.rotateCube:getMatrixSize()
+	for r=1,matrixSize do
+		for c=1,matrixSize do
+			if matrix[r][c] == 1 then
+				local row,col = self.rotateCube:getBlackgourdPos(r,c)
+				print('r: '..r..' c: '..c..' curCol: '..self.rotateCube:getCurCol()..' col: '..col)
+				if row<1 or row>self.row or col<1 or col>self.col or self.matrix[row][col] == 1 then
+					return false
+				end
+			end
+		end
+	end
+	return true
 end
 
 function Blackground:canDown( cube )

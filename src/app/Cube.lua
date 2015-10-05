@@ -206,9 +206,6 @@ function Cube:ctor( cubeType )
 	-- print(t[1][1])
 	self.cubeType = cubeType
 	self:setShape(1)
-	-- for k,v in pairs(self.matrix) do
-	-- 	print(v)
-	-- end
 	-- 所在位置(矩阵的第一行第一列为标准)
 	self.curRow = 1
 	self.curCol = 1
@@ -245,16 +242,6 @@ end
 function Cube:setPos( row, col )
 	self.curRow = row
 	self.curCol = col
-end
-
--- 背景行列对应的cube值
-function Cube:getValueFormBlackground( bRow,bCol )
-	local row = bRow - self.curRow + 1
-	local col = bCol - self.curCol + 1
-	if row>matrixSize or col>matrixSize then return nil end
-	if row<1 or col<1 then return nil end
-	print('curRow:'..self.curRow..' bRow: '..bRow..' bCol:'..bCol..' row:'..row..' col:'..col..' value:'..self.matrix[row][col])
-	return self.matrix[row][col]
 end
 
 -- 获取在对应的背景的行列
