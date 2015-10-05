@@ -19,6 +19,7 @@ function Blackground:ctor( row, col )
 			self.matrix[i][j] = 0
 		end
 	end
+	self.rotateCube = require('app.Cube'):create(1)
 end
 
 
@@ -45,9 +46,16 @@ function Blackground:copyCubeToBlackground( cube )
 	end
 end
 
+function Blackground:canRotate( cube )
+	self.rotateCube:setType(cube:getType())
+	self.rotateCube:setPos(cube:getPos())
+	self.rotateCube:setShape(cube:getShape())
+	return self:canDown(self.rotateCube) and self:canLeft(self.rotateCube) and self:canRight(self.rotateCube)
+end
+
 function Blackground:canDown( cube )
 	local cubeBounbary = cube:getBoundary('bottom')
-	print('cubeBounbary: '..cubeBounbary)
+	-- print('cubeBounbary: '..cubeBounbary)
 	if not(cubeBounbary<self.row) then 
 		game.blackground:copyCubeToBlackground(game.curCube)
 		return false 
@@ -60,7 +68,6 @@ function Blackground:canDown( cube )
 			if matrix[r][c] == 1 then
 				local row,col = cube:getBlackgourdPos(r,c)
 				if self.matrix[row+1][col] == 1 then
-					game.blackground:copyCubeToBlackground(game.curCube)
 					return false
 				end
 			end

@@ -16,6 +16,7 @@ function StateCubeMove:onEnter()
             game.curCube:move('down')
             cc.Director:getInstance():getEventDispatcher():dispatchEvent(cc.EventCustom:new('repaint'))
         else
+            game.blackground:copyCubeToBlackground(game.curCube)
             game.FSMStateCtrl:gotoState('StateCubeStandby')
         end
         

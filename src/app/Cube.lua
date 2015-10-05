@@ -5,71 +5,214 @@ local Cube = class( "Cube" )
 local matrixSize = 4
 local t = 
 {
-	[1] = 
+	[1] =
+		{
 			{
 				{1,0,0,0},
 				{1,0,0,0},
 				{1,0,0,0},
 				{1,0,0,0},
 			},
+			{
+				{1,1,1,1},
+				{0,0,0,0},
+				{0,0,0,0},
+				{0,0,0,0},
+			},
+			{
+				{1,0,0,0},
+				{1,0,0,0},
+				{1,0,0,0},
+				{1,0,0,0},
+			},
+			{
+				{1,1,1,1},
+				{0,0,0,0},
+				{0,0,0,0},
+				{0,0,0,0},
+			},
+		},
+
 	[2] = 
+		{
 			{
 				{1,1,1,0},
 				{0,1,0,0},
 				{0,0,0,0},
 				{0,0,0,0},
 			},
+			{
+				{1,0,0,0},
+				{1,1,0,0},
+				{1,0,0,0},
+				{0,0,0,0},
+			},
+			{
+				{0,1,0,0},
+				{1,1,1,0},
+				{0,0,0,0},
+				{0,0,0,0},
+			},
+			{
+				{0,1,0,0},
+				{1,1,0,0},
+				{0,1,0,0},
+				{0,0,0,0},
+			},
+		},
 	[3] = 
+		{
 			{
 				{1,1,0,0},
 				{1,1,0,0},
 				{0,0,0,0},
 				{0,0,0,0},
 			},
+			{
+				{1,1,0,0},
+				{1,1,0,0},
+				{0,0,0,0},
+				{0,0,0,0},
+			},
+			{
+				{1,1,0,0},
+				{1,1,0,0},
+				{0,0,0,0},
+				{0,0,0,0},
+			},
+			{
+				{1,1,0,0},
+				{1,1,0,0},
+				{0,0,0,0},
+				{0,0,0,0},
+			},
+		},
 	[4] = 
+		{
 			{
 				{1,1,0,0},
 				{0,1,0,0},
 				{0,1,0,0},
 				{0,0,0,0},
 			},
+			{
+				{1,1,1,0},
+				{1,0,0,0},
+				{0,0,0,0},
+				{0,0,0,0},
+			},
+			{
+				{1,0,0,0},
+				{1,0,0,0},
+				{1,1,0,0},
+				{0,0,0,0},
+			},
+			{
+				{0,0,1,0},
+				{1,1,1,0},
+				{0,0,0,0},
+				{0,0,0,0},
+			},
+		},
 
 	[5] = 
+		{
 			{
 				{1,1,0,0},
 				{1,0,0,0},
 				{1,0,0,0},
 				{0,0,0,0},
 			},
+			{
+				{1,0,0,0},
+				{1,1,1,0},
+				{0,0,0,0},
+				{0,0,0,0},
+			},
+			{
+				{0,1,0,0},
+				{0,1,0,0},
+				{1,1,0,0},
+				{0,0,0,0},
+			},
+			{
+				{1,1,1,0},
+				{0,0,1,0},
+				{0,0,0,0},
+				{0,0,0,0},
+			},
+		},
+
 	[6] = 
+		{
 			{
 				{1,0,0,0},
 				{1,1,0,0},
 				{0,1,0,0},
 				{0,0,0,0},
 			},
+			{
+				{0,1,1,0},
+				{1,1,0,0},
+				{0,0,0,0},
+				{0,0,0,0},
+			},
+			{
+				{1,0,0,0},
+				{1,1,0,0},
+				{0,1,0,0},
+				{0,0,0,0},
+			},
+			{
+				{0,1,1,0},
+				{1,1,0,0},
+				{0,0,0,0},
+				{0,0,0,0},
+			},
+		},
 
 	[7] = 
+		{
 			{
 				{0,1,0,0},
 				{1,1,0,0},
 				{1,0,0,0},
 				{0,0,0,0},
 			},
-
-
-	
+			{
+				{1,1,0,0},
+				{0,1,1,0},
+				{0,0,0,0},
+				{0,0,0,0},
+			},
+			{
+				{0,1,0,0},
+				{1,1,0,0},
+				{1,0,0,0},
+				{0,0,0,0},
+			},
+			{
+				{1,1,0,0},
+				{0,1,1,0},
+				{0,0,0,0},
+				{0,0,0,0},
+			},
+		},
 }
 
 function Cube:ctor( cubeType )
 	print('---Cube:ctor---')
 	if not cubeType then return end
-	self.matrix = t[cubeType]
+	-- print(t[1][1])
+	self.cubeType = cubeType
+	self:setShape(1)
+	-- for k,v in pairs(self.matrix) do
+	-- 	print(v)
+	-- end
 	-- 所在位置(矩阵的第一行第一列为标准)
 	self.curRow = 1
 	self.curCol = 1
 	--
-	self:updateMatrix()
 end
 
 -- 获取方块的三个方向的边界值所在背景中的位置(右边界值:在方块矩阵的列中,有值为1的最右边的一列)
@@ -95,6 +238,9 @@ function Cube:move( dir, blackgroundRow, blackgroundCol )
 	-- print("curCube row: "..self.curRow.." col:"..self.curCol)
 end
 
+function Cube:getPos( row, col )
+	return self.curRow,self.curCol
+end
 
 function Cube:setPos( row, col )
 	self.curRow = row
@@ -133,28 +279,29 @@ function Cube:getMatrixSize(  )
 	return matrixSize
 end
 
+function Cube:getShape()
+	return self.curShape
+end
 
+function Cube:setType( type )
+	self.cubeType = type
+end
+
+function Cube:getType()
+	return self.cubeType
+end
+
+function Cube:setShape( shape )
+	self.curShape = shape
+	self.matrix = t[self.cubeType][shape]
+	self:updateMatrix()
+end
 
 -- dir>0: 顺时针90°,   dir<0:逆时针90°
 function Cube:rotate( dir )
-	-- init m
-	local m = {}
-	for r=1,matrixSize do
-		m[r] = {}
-	end
-
-	-- copy to m
-	for r=1,matrixSize do
-		for c=1,matrixSize do
-			m[r][c] = self.matrix[r][c]
-		end
-	end
-	-- rotate
-	for r=1,matrixSize do
-		for c=1,matrixSize do
-			self.matrix[r][c] = m[c][matrixSize+1-c]
-		end
-	end
+	self.curShape = self.curShape + 1
+	if self.curShape > matrixSize then self.curShape = 1 end
+	self.matrix = t[self.cubeType][self.curShape]
 	--
 	self:updateMatrix()
 end
@@ -166,7 +313,7 @@ function Cube:updateMatrix()
 		for c=1,matrixSize do
 			if self.matrix[r][c] == 1 then
 				self.bBoundary = r
-				print('bBoundary: '..self.bBoundary)
+				-- print('bBoundary: '..self.bBoundary)
 				flag = true
 				break
 			end
@@ -180,7 +327,7 @@ function Cube:updateMatrix()
 		for r=1,matrixSize do
 			if self.matrix[r][c] == 1 then
 				self.rBoundary = c
-				print('rBoundary: '..self.rBoundary)
+				-- print('rBoundary: '..self.rBoundary)
 				flag = true
 				break
 			end
