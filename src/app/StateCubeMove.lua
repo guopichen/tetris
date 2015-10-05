@@ -12,8 +12,8 @@ function StateCubeMove:onEnter()
         scheduler:unscheduleScriptEntry(self.schedulerUpdate)
     end
     self.schedulerUpdate = scheduler:scheduleScriptFunc(function( delta )
-        if game.blackground:down(game.curCube.cube,game.curCube.row,game.curCube.col) then 
-            game.curCube.row = game.curCube.row + 1
+        if game.blackground:canDown(game.curCube) then 
+            game.curCube:move('down')
             cc.Director:getInstance():getEventDispatcher():dispatchEvent(cc.EventCustom:new('repaint'))
         else
             game.FSMStateCtrl:gotoState('StateCubeStandby')

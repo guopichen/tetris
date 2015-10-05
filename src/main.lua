@@ -12,18 +12,17 @@ require "cocos.init"
 local function gameInit()
 	
 	game = {}
-	game.row = 20
-	game.col = 12
 	
 	game.FSMStateCtrl = require('app.FSMStateCtrl'):create()
 	game.FSMStateCtrl:registState( 'StateCubeMove', require('app.StateCubeMove'):create() )
 	game.FSMStateCtrl:registState( 'StateCubeStandby', require('app.StateCubeStandby'):create() )
 	game.FSMStateCtrl:registState( 'StateGameMenu', require('app.StateGameMenu'):create() )
 	game.FSMStateCtrl:registState( 'StateGameOver', require('app.StateGameOver'):create() )
+	game.FSMStateCtrl:registState( 'StateCheckDisapear', require('app.StateCheckDisapear'):create() )
 	--
 	game.MoveMsgCtrl = require('app.MoveMsgCtrl'):create()
 	--
-	game.blackground = require('app.Blackground'):create(game.row,game.col)
+	game.blackground = require('app.Blackground'):create(20,12)
 end
 
 local function main()

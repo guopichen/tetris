@@ -5,57 +5,64 @@ local Blackground = class( "Blackground" )
 
 local N = 4
 
--- 初始化背景为: 0
+-- row,col: 可操作区域的行列
 function Blackground:ctor( row, col )
 	print("---this is Blackground:ctor----")
 	print("row is: "..row.." col is: "..col)
+	-- 可操作区域
 	self.row = row
 	self.col = col
-	self.m = {}
+	self.matrix = {}
 	for i=1,row do
-		self.m[i] = {}
+		self.matrix[i] = {}
 		for j=1,col do
-			self.m[i][j] = 0
+			self.matrix[i][j] = 0
 		end
 	end
 end
 
 
-function Blackground:copyValue( cube, curCol, curRow )
-	-- print("----this is Blackground:copyValue----")
+function Blackground:getSize()
+	return self.row,self.col
+end
 
-	-- print("curCol: "..curCol.." curRow: "..curRow)
+function Blackground:getMatrix()
+	return self.matrix
+end
 
-
+function Blackground:copyCubeToBlackground( cube )
 	-- --
-	for r=1,N do
-		for c=1,N do
-			if cube.m[r][c] == 1 then
-				local col = curCol+c-1
-				local row = curRow+r-1
-				-- if not(col>self.col) and not(row>self.row) then
+	local matrixSize = cube:getMatrixSize()
+	local cuebMatrix = cube:getMatrix()
+	for r=1,matrixSize do
+		for c=1,matrixSize do
+			if cuebMatrix[r][c] == 1 then
+				local row,col = cube:getBlackgourdPos(r,c)
+				self.matrix[row][col] = 1
 				-- print("row: "..row.." col: "..col.." r: "..r.." c: "..c)
-				self.m[row][col] = cube.m[r][c]
-				-- end
 			end
 		end
 	end
 end
 
-function Blackground:down( cube, curRow, curCol )
-	local lastRow = curRow+cube.bottomRow-1
-	print('lastRow: '..lastRow)
-	if not(lastRow<self.row) then
-		self:copyValue(cube,curCol,curRow)
-		return false -- 到底了
-	end
-	--
-	-- local nextRow = lastRow + 1
-	for r=cube.bottomRow,1,-1 do
-		for c=1,N do
-			if cube.m[r][c] == 1 and self.m[curRow+r][curCol+c-1] == 1 then
-				self:copyValue(cube,curCol,curRow)
-				return false
+function Blackground:canDown( cube )
+	local cubeBounbary = cube:getBoundary('bottom')
+	print('cubeBounbary: '..cubeBounbary)
+	if not(cubeBounbary<self.row) then 
+		game.blackground:copyCubeToBlackground(game.curCube)
+		return false 
+	end -- 到边了
+
+	local matrix = cube:getMatrix()
+	local matrixSize = cube:getMatrixSize()
+	for r=matrixSize,1,-1 do
+		for c=1,matrixSize do
+			if matrix[r][c] == 1 then
+				local row,col = cube:getBlackgourdPos(r,c)
+				if self.matrix[row+1][col] == 1 then
+					game.blackground:copyCubeToBlackground(game.curCube)
+					return false
+				end
 			end
 		end
 	end
@@ -63,49 +70,49 @@ function Blackground:down( cube, curRow, curCol )
 	return true
 end
 
-function Blackground:left(cube, curRow, curCol)
-	local leftCol = curCol+cube.leftCol-1
-	if not(leftCol>1) then
-		return false -- 到边了
-	end
-	--
-	for c=cube.leftCol,N do
-		for r=1,N do 
-			if cube.m[r][c] == 1 and self.m[curRow+r-1][curCol+c-2] == 1 then
-				return false
+function Blackground:canLeft(cube)
+	local cubeBounbary = cube:getBoundary('left')
+	if not(cubeBounbary>1) then return false end -- 到边了
+
+	local matrix = cube:getMatrix()
+	local matrixSize = cube:getMatrixSize()
+	for c=1,matrixSize do
+		for r=1,matrixSize do
+			if matrix[r][c] == 1 then
+				local row,col = cube:getBlackgourdPos(r,c)
+				if self.matrix[row][col-1] == 1 then
+					return false
+				end
 			end
 		end
 	end
+
 	return true
 end
 
-function Blackground:right(cube, curRow, curCol)
-	local rightCol = curCol+cube.rightCol-1
-	if not(rightCol<self.col) then
-		return false -- 到边了
-	end
-	--
-	for c=cube.rightCol,1,-1 do
-		for r=1,N do 
-			if cube.m[r][c] == 1 and self.m[curRow+r-1][curCol+c] == 1 then
-				return false
+function Blackground:canRight(cube)
+	local cubeBounbary = cube:getBoundary('right')
+	if not(cubeBounbary<self.col) then return false end -- 到边了
+
+	local matrix = cube:getMatrix()
+	local matrixSize = cube:getMatrixSize()
+	for c=matrixSize,1,-1 do
+		for r=1,matrixSize do
+			if matrix[r][c] == 1 then
+				local row,col = cube:getBlackgourdPos(r,c)
+				if self.matrix[row][col+1] == 1 then
+					return false
+				end
 			end
 		end
 	end
-	return true
-end
 
-function Blackground:initBackRect( startPosX, startPosY )
-	self.startPosX = startPosX
-	self.startPosY = startPosY
+	return true
+
 end
 
 function Blackground:isOver()
 	return false
-end
-
-function Blackground:runDisapearEffect()
-	-- body
 end
 
 
@@ -117,28 +124,7 @@ end
 	end
 --]]
 function Blackground:checkDisapear()
-	self.disapearLines = {}
-	for r=self.row,1,-1 do
-		local flag = true -- 消除标记
-		for c=1,self.col do
-			if 0 == self.m[r][c] then
-				flag = false
-				break
-			end
-		if flag then -- 消除此行(即:此行以上的所有行,全部下移一行,本行被覆盖)
-			for i=self.row,2,-1 do
-				for j=1,self.col do
-					self.m[i][j] = self.m[i-1][j]
-					self.disapearLines[i] = true -- 记录消除行
-				end
-			end
-			-- 第一行全置为0
-			for j=1,self.col do
-					self.m[1][j] = 0
-			end
-		end
-		end
-	end
+
 end
 
 

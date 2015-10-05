@@ -3,16 +3,21 @@ local StateCubeStandby = class( "StateCubeStandby" )
 
 function StateCubeStandby:ctor()
 	print("this is StateCubeStandby:ctor")
+	self:createNextCube()
 end
+
+function StateCubeStandby:createNextCube()
+	math.randomseed(os.time())
+	game.nextCube = require('app.Cube'):create(math.random(1,7))
+	game.nextCube:setPos(1,6)
+end
+
 
 function StateCubeStandby:onEnter()
 	print("this is StateCubeStandby:onEnter")
-	-- 随机一个方块
-	math.randomseed(os.time())
-	game.curCube = {}
-	game.curCube.cube = require('app.Cube'):create(math.random(1,5))--
-	game.curCube.row = 0
-	game.curCube.col = 5
+	--
+	game.curCube = game.nextCube
+	self:createNextCube()
 	-- 开始计时: 两秒后进入cubemove的状态
 	local scheduler = cc.Director:getInstance():getScheduler()
     if self.schedulerUpdate ~= nil then
@@ -20,7 +25,7 @@ function StateCubeStandby:onEnter()
     end
     self.schedulerUpdate = scheduler:scheduleScriptFunc(function( delta )
         game.FSMStateCtrl:gotoState('StateCubeMove')
-    end,  1, false)
+    end,  0.1, false)
 end
 
 function StateCubeStandby:onExit()

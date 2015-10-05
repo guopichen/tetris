@@ -57,16 +57,8 @@ function PlayScene:onCreate()
     self.cubeNodes:setName('cubes')
     self:addChild(self.cubeNodes,2)
 
-    -- 背景框
-    self.w = 300
-    self.h = 500
-    local drawNode = cc.DrawNode:create()
-    self.startPos = cc.p(100,100)
-    local endPos = cc.p(self.startPos.x+self.w,self.startPos.y+self.h)
-    drawNode:drawRect(self.startPos,endPos,cc.c4f(0,1,0,1))
-    self:addChild(drawNode)
     --
-    self:initCubes()
+    self:initDraw()
 
     --
     self.repaintListener  = cc.EventListenerCustom:create( 'repaint', function( event)
@@ -76,51 +68,81 @@ function PlayScene:onCreate()
 end
 
 
-
-function PlayScene:initCubes()
+function PlayScene:initDraw()
     local cubeSize = 23
     local space = 2
-    local N = game.blackground.row
-    for i=1,game.blackground.row do
-        for j=1,game.blackground.col do
+    local startPos = cc.p(100,20)
+    local totalRow, totalCol = game.blackground:getSize()
+
+    -- 方块
+    for r=1,totalRow do
+        for c=1,totalCol do
             local drawNode = cc.DrawNode:create()
-            local startPos = cc.p(self.startPos.x+(j-1)*(cubeSize+space),self.startPos.y+(N-i)*(cubeSize+space))
-            -- startPos.y = self.startPos.y
-            drawNode:drawSolidRect(startPos,cc.p(startPos.x+cubeSize,startPos.y+cubeSize),cc.c4f(1,0,0,1))
+            local pos = cc.p(startPos.x+(c-1)*(cubeSize+space),startPos.y+(totalRow-r)*(cubeSize+space))
+            
+            local endPos = cc.p(pos.x+cubeSize,pos.y+cubeSize)
+            drawNode:drawSolidRect(pos,endPos, cc.c4f(1,0,0,1))
             drawNode:setVisible(false)
-            drawNode:setName(i..'*'..j)
+            drawNode:setName(r..'*'..c)
             self.cubeNodes:addChild(drawNode)
         end
     end
+    -- 背景框
+    local drawNode = cc.DrawNode:create()
+    local endPos = cc.p(startPos.x+cubeSize*totalCol+space*(totalCol-1),
+                        startPos.y+cubeSize*totalRow+space*(totalRow-1))
+    drawNode:drawRect(startPos,endPos,cc.c4f(0,1,0,1))
+    self:addChild(drawNode)
+
+
 end
 
 -- 需要先渲染背景, 再渲染方块
 function PlayScene:draw()
-    local N=4
-    local matrix = game.blackground.m
-    for i=1,game.blackground.row do
-        for j=1,game.blackground.col do
-            local sp = self.cubeNodes:getChildByName(i..'*'..j)
-            sp:setVisible(matrix[i][j] == 1 and true or false)
+
+    local totalRow, totalCol = game.blackground:getSize()
+    local matrix = game.blackground:getMatrix()
+    for r=1,totalRow do
+        for c=1,totalCol do
+            local sp = self.cubeNodes:getChildByName(r..'*'..c)
+            sp:setVisible(matrix[r][c] == 1 and true or false)
         end
     end
-    
-    for r=1,N do
-        for c=1,N do
-            local i = game.curCube.row+r-1
-            local j= game.curCube.col+c-1
-            -- print('')
-            -- print(" i: "..i.." j: "..j.." curCol: "..game.curCube.col)
-            -- print('')
 
-            if not(i>game.row) and not(j>game.col) then
+    local matrixSize = game.curCube:getMatrixSize()
+    local cubeMatrix = game.curCube:getMatrix()
+    for r=1,matrixSize do
+        for c=1,matrixSize do
+            if cubeMatrix[r][c] == 1 then
+                local i,j = game.curCube:getBlackgourdPos(r,c)
+                -- print('i: '..i..' j: '..j)
                 local sp = self.cubeNodes:getChildByName(i..'*'..j)
-                if game.curCube.cube.m[r][c] == 1 then
-                    sp:setVisible(true)
-                end
+                sp:setVisible(true)
             end
         end
     end
+
+    -- local N=4
+    -- local matrix = game.blackground.m
+    -- for i=1,game.blackground.row do
+    --     for j=1,game.blackground.col do
+    --         local sp = self.cubeNodes:getChildByName(i..'*'..j)
+    --         sp:setVisible(matrix[i][j] == 1 and true or false)
+    --     end
+    -- end
+    
+    -- for r=1,N do
+    --     for c=1,N do
+    --         local i = game.curCube.row+r-1
+    --         local j= game.curCube.col+c-1
+    --         if not(i>game.row) and not(j>game.col) then
+    --             local sp = self.cubeNodes:getChildByName(i..'*'..j)
+    --             if game.curCube.cube.m[r][c] == 1 then
+    --                 sp:setVisible(true)
+    --             end
+    --         end
+    --     end
+    -- end
     
 
     -- print("-----draw------")
