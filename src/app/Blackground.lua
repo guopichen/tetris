@@ -139,6 +139,12 @@ function Blackground:canRight(cube)
 
 end
 
+function Blackground:moveToBottom( cube )
+	while self:canDown(cube) do
+		cube:move('down')
+	end
+end
+
 function Blackground:checkOver(cube)
 	return cube:getCurRow()<2 and true or false
 end

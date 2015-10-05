@@ -41,6 +41,18 @@ function PlayScene:onCreate()
     downButton:setPosition(display.cx+200, display.cy-200)
 
 
+    local function moveToBottomTouchEvent(sender,eventType)
+        if eventType == ccui.TouchEventType.ended then
+            game.MoveMsgCtrl:onMoveMsg('moveToBottom')
+        end
+    end
+    local moveToBottomButton = ccui.Button:create('Star.png')
+    moveToBottomButton:setTouchEnabled(true)
+    moveToBottomButton:addTouchEventListener(moveToBottomTouchEvent)
+    self:addChild( moveToBottomButton)
+    moveToBottomButton:setPosition(display.cx+400, display.cy-200)
+
+
     local function ratoteTouchEvent(sender,eventType)
         if eventType == ccui.TouchEventType.ended then
             game.MoveMsgCtrl:onMoveMsg('rotate')

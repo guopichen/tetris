@@ -22,6 +22,9 @@ function MoveMsgCtrl:onMoveMsg( event )
 			game.FSMStateCtrl:gotoState('StateCheck')
 			return
 		end
+	elseif event == 'moveToBottom' then
+		game.blackground:moveToBottom(game.curCube)
+		game.FSMStateCtrl:gotoState('StateCheck')
 	elseif event == 'rotate' then
 		if game.blackground:canRotate(game.curCube) then
 			game.curCube:rotate()
