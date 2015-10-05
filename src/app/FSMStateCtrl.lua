@@ -15,7 +15,7 @@ function FSMStateCtrl:getCurStateName()
 end
 
 function FSMStateCtrl:gotoState( stateName )
-	print("gotoState: "..stateName)
+	-- print("gotoState: "..stateName)
 	if not self.states[stateName] then return end
 	if self.curState then self.curState:onExit() end
 	self.curStateName = stateName

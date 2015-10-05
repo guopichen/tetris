@@ -4,7 +4,7 @@ local PlayScene = class("PlayScene", cc.load("mvc").ViewBase)
 local GameView = import(".GameView")
 
 function PlayScene:onCreate()
-    print("---this is PlayScene:onCreate----")
+    -- print("---this is PlayScene:onCreate----")
 	game.FSMStateCtrl:gotoState('StateCubeMove')
 
     local function leftTouchEvent(sender,eventType)
@@ -56,6 +56,11 @@ function PlayScene:onCreate()
     self.cubeNodes = cc.Node:create()
     self.cubeNodes:setName('cubes')
     self:addChild(self.cubeNodes,2)
+    -- next
+    self.nextCubeNode = cc.Node:create()
+    self:addChild(self.nextCubeNode,2)
+
+
 
     --
     self:initDraw()
@@ -87,6 +92,25 @@ function PlayScene:initDraw()
             self.cubeNodes:addChild(drawNode)
         end
     end
+
+    -- next cube
+    local nextStartPos = cc.p(startPos.x-50,startPos.y)--cc.p(startPos.x+100,startPos.y+300)
+    local matrixSize = 4
+    for r=1,matrixSize do
+        for c=1,matrixSize do
+            local drawNode = cc.DrawNode:create()
+            local pos = cc.p(nextStartPos.x+(c-1)*(cubeSize+space),nextStartPos.y+(cubeSize-r)*(cubeSize+space))
+            local endPos = cc.p(pos.x+cubeSize,pos.y+cubeSize)
+            drawNode:drawSolidRect(pos,endPos, cc.c4f(1,0,0,1))
+            drawNode:setVisible(false)
+            drawNode:setName(r..'*'..c)
+            self.nextCubeNode:addChild(drawNode)
+
+        end
+    end
+    -- test
+    -- self.nextCubeNode:getChildByName('1*1'):setVisible(false)
+
     -- 背景框
     local drawNode = cc.DrawNode:create()
     local endPos = cc.p(startPos.x+cubeSize*totalCol+space*(totalCol-1),
@@ -110,6 +134,7 @@ function PlayScene:draw()
     end
 
     local matrixSize = game.curCube:getMatrixSize()
+    -- cur cube
     local cubeMatrix = game.curCube:getMatrix()
     for r=1,matrixSize do
         for c=1,matrixSize do
@@ -122,30 +147,14 @@ function PlayScene:draw()
         end
     end
 
-    -- local N=4
-    -- local matrix = game.blackground.m
-    -- for i=1,game.blackground.row do
-    --     for j=1,game.blackground.col do
-    --         local sp = self.cubeNodes:getChildByName(i..'*'..j)
-    --         sp:setVisible(matrix[i][j] == 1 and true or false)
-    --     end
-    -- end
-    
-    -- for r=1,N do
-    --     for c=1,N do
-    --         local i = game.curCube.row+r-1
-    --         local j= game.curCube.col+c-1
-    --         if not(i>game.row) and not(j>game.col) then
-    --             local sp = self.cubeNodes:getChildByName(i..'*'..j)
-    --             if game.curCube.cube.m[r][c] == 1 then
-    --                 sp:setVisible(true)
-    --             end
-    --         end
-    --     end
-    -- end
-    
-
-    -- print("-----draw------")
+    -- nextCube
+    local nextMatrix = game.nextCube:getMatrix()
+    for r=1,matrixSize do
+        for c=1,matrixSize do
+            local sp = self.nextCubeNode:getChildByName(r..'*'..c)
+            sp:setVisible(nextMatrix[r][c] == 1 and true or false)
+        end
+    end
 
 end
 

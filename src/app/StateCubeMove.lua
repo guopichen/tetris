@@ -12,7 +12,7 @@ function StateCubeMove:createNextCube()
 end
 
 function StateCubeMove:onEnter()
-    print("----this is StateCubeMove:onEnter---")
+    -- print("----this is StateCubeMove:onEnter---")
     game.curCube = game.nextCube
     self:createNextCube()
     cc.Director:getInstance():getEventDispatcher():dispatchEvent(cc.EventCustom:new('repaint'))

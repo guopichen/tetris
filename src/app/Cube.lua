@@ -201,7 +201,7 @@ local t =
 }
 
 function Cube:ctor( cubeType )
-	print('---Cube:ctor---')
+	-- print('---Cube:ctor---')
 	if not cubeType then return end
 	-- print(t[1][1])
 	self.cubeType = cubeType

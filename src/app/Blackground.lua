@@ -7,8 +7,8 @@ local N = 4
 
 -- row,col: 可操作区域的行列
 function Blackground:ctor( row, col )
-	print("---this is Blackground:ctor----")
-	print("row is: "..row.." col is: "..col)
+	-- print("---this is Blackground:ctor----")
+	-- print("row is: "..row.." col is: "..col)
 	-- 可操作区域
 	self.row = row
 	self.col = col
@@ -64,7 +64,7 @@ function Blackground:canRotate( cube )
 		for c=1,matrixSize do
 			if matrix[r][c] == 1 then
 				local row,col = self.rotateCube:getBlackgourdPos(r,c)
-				print('r: '..r..' c: '..c..' curCol: '..self.rotateCube:getCurCol()..' col: '..col)
+				-- print('r: '..r..' c: '..c..' curCol: '..self.rotateCube:getCurCol()..' col: '..col)
 				if row<1 or row>self.row or col<1 or col>self.col or self.matrix[row][col] == 1 then
 					return false
 				end
