@@ -5,7 +5,7 @@ function StateGameOver:ctor()
 end
 
 function StateGameOver:onEnter()
-	print("this is StateGameMenu:onEnter")
+	print("this is StateGameOver:onEnter")
 end
 
 function StateGameOver:onExit()

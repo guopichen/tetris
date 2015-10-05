@@ -5,7 +5,7 @@ local GameView = import(".GameView")
 
 function PlayScene:onCreate()
     print("---this is PlayScene:onCreate----")
-	game.FSMStateCtrl:gotoState('StateCubeStandby')
+	game.FSMStateCtrl:gotoState('StateCubeMove')
 
     local function leftTouchEvent(sender,eventType)
         if eventType == ccui.TouchEventType.ended then

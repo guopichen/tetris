@@ -19,6 +19,11 @@ function Blackground:ctor( row, col )
 			self.matrix[i][j] = 0
 		end
 	end
+	-- test
+	-- for j=1,col do
+	-- 	self.matrix[self.row][j] = 1
+	-- end
+	
 	self.rotateCube = require('app.Cube'):create(1)
 end
 
@@ -118,8 +123,8 @@ function Blackground:canRight(cube)
 
 end
 
-function Blackground:isOver()
-	return false
+function Blackground:checkOver(cube)
+	return cube:getCurRow()<2 and true or false
 end
 
 
@@ -131,7 +136,51 @@ end
 	end
 --]]
 function Blackground:checkDisapear()
+	local rtn = false
+	local disapear = true
+	for r=1,self.row do
+		for c=1,self.col do
+			if self.matrix[r][c] == 0 then
+				disapear = false
+			end
+		end
+		if disapear then
+			for c=1,self.col do
+				self.matrix[r][c] = 0 
+			end
+			rtn = true
+		end
+		disapear = true
+	end
 
+	-- print('xxxxxxx')
+	-- print(rtn)
+	if rtn then
+		local allZero = true -- 正行都是0
+		for curRow=self.row,2,-1 do
+			-- print('hahahhaha')
+			for col=1,self.col do
+				if self.matrix[curRow][col] == 1 then
+					-- print("++++++ "..curRow..'  '..col)
+					allZero = false
+					break
+				end
+			end
+			if allZero then
+				-- print("********** "..curRow)
+				local zeroRow = curRow
+				for r=zeroRow,2,-1 do -- 下移
+					for c=1,self.col do
+						self.matrix[r][c] = self.matrix[r-1][c]
+					end
+					-- print('move line: '..(r-1)..' to line: '..r)
+				end
+			end
+			allZero = true
+		end
+	end
+
+	return rtn
 end
 
 

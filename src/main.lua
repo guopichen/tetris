@@ -15,10 +15,10 @@ local function gameInit()
 	
 	game.FSMStateCtrl = require('app.FSMStateCtrl'):create()
 	game.FSMStateCtrl:registState( 'StateCubeMove', require('app.StateCubeMove'):create() )
-	game.FSMStateCtrl:registState( 'StateCubeStandby', require('app.StateCubeStandby'):create() )
+	-- game.FSMStateCtrl:registState( 'StateCubeStandby', require('app.StateCubeStandby'):create() )
 	game.FSMStateCtrl:registState( 'StateGameMenu', require('app.StateGameMenu'):create() )
 	game.FSMStateCtrl:registState( 'StateGameOver', require('app.StateGameOver'):create() )
-	game.FSMStateCtrl:registState( 'StateCheckDisapear', require('app.StateCheckDisapear'):create() )
+	game.FSMStateCtrl:registState( 'StateCheck', require('app.StateCheck'):create() )
 	--
 	game.MoveMsgCtrl = require('app.MoveMsgCtrl'):create()
 	--

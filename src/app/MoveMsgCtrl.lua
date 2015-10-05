@@ -19,7 +19,8 @@ function MoveMsgCtrl:onMoveMsg( event )
 		if game.blackground:canDown(game.curCube) then
 			game.curCube:move('down')
 		else
-			game.blackground:copyCubeToBlackground(game.curCube)
+			game.FSMStateCtrl:gotoState('StateCheck')
+			return
 		end
 	elseif event == 'rotate' then
 		if game.blackground:canRotate(game.curCube) then
